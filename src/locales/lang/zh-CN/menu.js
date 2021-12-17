@@ -36,5 +36,11 @@ export default {
     'menu.account.settings': '个人设置',
     'menu.account.trigger': '触发报错',
     'menu.account.logout': '退出登录',
-    'menu.client': '用户主页'
+    'menu.client': '用户主页',
+    'menu.admin': '发布表单',
+    'menu.submit': '项目申报',
+    'menu.check': '信息审核',
+    'menu.sci': '科研',
+    'menu.book': '教材'
+
 }

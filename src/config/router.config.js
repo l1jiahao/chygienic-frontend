@@ -203,7 +203,6 @@ export const asyncRouterMap = [
           }
         ]
       },
-
       // account
       {
         path: '/account',
@@ -270,11 +269,85 @@ export const asyncRouterMap = [
           }
         ]
       },
+      // 用户首页
       {
         path: '/client',
         name: 'client',
         component: () => import(/* webpackChunkName: "client" */ '@/chygienic/user/UserDashboard'),
         meta: { title: 'menu.client', icon: 'home', permission: ['user'] }
+      },
+      // 用户申报
+      {
+        path: '/submit',
+        name: 'submit',
+        component: RouteView,
+        meta: { title: 'menu.submit', icon: 'home', permission: ['user'] },
+        children: [
+          {
+            path: '/account/settings/basic',
+            name: 'BasicSettings',
+            component: () => import('@/views/account/settings/BasicSetting'),
+            meta: { title: 'menu.sci', hidden: true, permission: ['user'] }
+          },
+          {
+            path: '/account/settings/security',
+            name: 'SecuritySettings',
+            component: () => import('@/views/account/settings/Security'),
+            meta: {
+              title: 'menu.book',
+              hidden: true,
+              keepAlive: true,
+              permission: ['user']
+            }
+          }
+        ]
+      },
+      // 管理员界面发布表单
+      {
+        path: '/admin',
+        name: 'admin',
+        component: RouteView,
+        meta: { title: 'menu.admin', icon: 'home', permission: ['user'] },
+        children: [
+          {
+            path: '/account/settings/basic',
+            name: 'BasicSettings',
+            component: () => import('@/views/account/settings/BasicSetting'),
+            meta: { title: 'menu.sci', hidden: true, permission: ['user'] }
+          },
+          {
+            path: '/account/settings/basic',
+            name: 'BasicSettings',
+            component: () => import('@/views/account/settings/BasicSetting'),
+            meta: { title: 'menu.book', hidden: true, permission: ['user'] }
+          }
+        ]
+      },
+      // 管理员审核
+      {
+        path: '/check',
+        name: 'check',
+        component: RouteView,
+        meta: { title: 'menu.check', icon: 'home', permission: ['user'] },
+        children: [
+          {
+            path: '/account/settings/basic',
+            name: 'BasicSettings',
+            component: () => import('@/views/account/settings/BasicSetting'),
+            meta: { title: 'account.settings.menuMap.basic', hidden: true, permission: ['user'] }
+          },
+          {
+            path: '/account/settings/security',
+            name: 'SecuritySettings',
+            component: () => import('@/views/account/settings/Security'),
+            meta: {
+              title: 'menu.book',
+              hidden: true,
+              keepAlive: true,
+              permission: ['user']
+            }
+          }
+        ]
       }
     ]
   },
