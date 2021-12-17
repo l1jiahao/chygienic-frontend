@@ -281,18 +281,18 @@ export const asyncRouterMap = [
         path: '/submit',
         name: 'submit',
         component: RouteView,
-        meta: { title: 'menu.submit', icon: 'home', permission: ['user'] },
+        meta: { title: 'menu.submit', icon: 'idcard', permission: ['user'] },
         children: [
           {
-            path: '/account/settings/basic',
-            name: 'BasicSettings',
-            component: () => import('@/views/account/settings/BasicSetting'),
+            path: '/submit/sci',
+            name: 'SubmitSci',
+            component: () => import('@/chygienic/user/stepForm/StepForm'),
             meta: { title: 'menu.sci', hidden: true, permission: ['user'] }
           },
           {
-            path: '/account/settings/security',
-            name: 'SecuritySettings',
-            component: () => import('@/views/account/settings/Security'),
+            path: '/submit/book',
+            name: 'SubmitBook',
+            component: () => import('@/chygienic/user/stepForm/StepForm'),
             meta: {
               title: 'menu.book',
               hidden: true,
@@ -307,18 +307,18 @@ export const asyncRouterMap = [
         path: '/admin',
         name: 'admin',
         component: RouteView,
-        meta: { title: 'menu.admin', icon: 'home', permission: ['user'] },
+        meta: { title: 'menu.admin', icon: 'form', permission: ['user'] },
         children: [
           {
-            path: '/account/settings/basic',
-            name: 'BasicSettings',
-            component: () => import('@/views/account/settings/BasicSetting'),
+            path: '/admin/sci',
+            name: 'ReleaseSci',
+            component: () => import('@/chygienic/admin/ReleaseSci'),
             meta: { title: 'menu.sci', hidden: true, permission: ['user'] }
           },
           {
-            path: '/account/settings/basic',
-            name: 'BasicSettings',
-            component: () => import('@/views/account/settings/BasicSetting'),
+            path: '/admin/book',
+            name: 'ReleaseBook',
+            component: () => import('@/chygienic/admin/ReleaseBook'),
             meta: { title: 'menu.book', hidden: true, permission: ['user'] }
           }
         ]
@@ -328,18 +328,18 @@ export const asyncRouterMap = [
         path: '/check',
         name: 'check',
         component: RouteView,
-        meta: { title: 'menu.check', icon: 'home', permission: ['user'] },
+        meta: { title: 'menu.check', icon: 'file-protect', permission: ['user'] },
         children: [
           {
-            path: '/account/settings/basic',
-            name: 'BasicSettings',
-            component: () => import('@/views/account/settings/BasicSetting'),
-            meta: { title: 'account.settings.menuMap.basic', hidden: true, permission: ['user'] }
+            path: '/check/sci',
+            name: 'CheckSci',
+            component: () => import('@/chygienic/admin/stepForm/StepForm'),
+            meta: { title: 'menu.sci', hidden: true, permission: ['user'] }
           },
           {
-            path: '/account/settings/security',
-            name: 'SecuritySettings',
-            component: () => import('@/views/account/settings/Security'),
+            path: '/check/book',
+            name: 'CheckBook',
+            component: () => import('@/chygienic/admin/stepForm/StepForm'),
             meta: {
               title: 'menu.book',
               hidden: true,
