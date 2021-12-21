@@ -15,6 +15,7 @@
         <step2 v-if="currentTab === 1" @nextStep="nextStep" @prevStep="prevStep"/>
         <step3 v-if="currentTab === 2" @prevStep="prevStep" @finish="finish"/>
       </div>
+
     </a-card>
   </page-header-wrapper>
 </template>

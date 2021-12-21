@@ -62,19 +62,19 @@
         </a-form>
       </div>
 
-      <div class="table-operator">
-        <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
-        <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">
-          <a-menu slot="overlay">
-            <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
-            <!-- lock | unlock -->
-            <a-menu-item key="2"><a-icon type="lock" />锁定</a-menu-item>
-          </a-menu>
-          <a-button style="margin-left: 8px">
-            批量操作 <a-icon type="down" />
-          </a-button>
-        </a-dropdown>
-      </div>
+<!--      <div class="table-operator">-->
+<!--        <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>-->
+<!--        <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">-->
+<!--          <a-menu slot="overlay">-->
+<!--            <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>-->
+<!--            &lt;!&ndash; lock | unlock &ndash;&gt;-->
+<!--            <a-menu-item key="2"><a-icon type="lock" />锁定</a-menu-item>-->
+<!--          </a-menu>-->
+<!--          <a-button style="margin-left: 8px">-->
+<!--            批量操作 <a-icon type="down" />-->
+<!--          </a-button>-->
+<!--        </a-dropdown>-->
+<!--      </div>-->
 
       <s-table
         ref="table"
@@ -98,9 +98,11 @@
 
         <span slot="action" slot-scope="text, record">
           <template>
-            <a @click="handleEdit(record)">配置</a>
+            <a @click="handleEdit(record)">详情</a>
             <a-divider type="vertical" />
-            <a @click="handleSub(record)">订阅报警</a>
+            <a @click="handleSub(record)">修改</a>
+            <a-divider type="vertical" />
+            <a @click="handleSub(record)">撤销</a>
           </template>
         </span>
       </s-table>
@@ -132,30 +134,14 @@ const columns = [
     scopedSlots: { customRender: 'serial' }
   },
   {
-    title: '规则编号',
-    dataIndex: 'no'
-  },
-  {
-    title: '描述',
+    title: '项目名称',
     dataIndex: 'description',
     scopedSlots: { customRender: 'description' }
-  },
-  {
-    title: '服务调用次数',
-    dataIndex: 'callNo',
-    sorter: true,
-    needTotal: true,
-    customRender: (text) => text + ' 次'
   },
   {
     title: '状态',
     dataIndex: 'status',
     scopedSlots: { customRender: 'status' }
-  },
-  {
-    title: '更新时间',
-    dataIndex: 'updatedAt',
-    sorter: true
   },
   {
     title: '操作',
@@ -168,7 +154,7 @@ const columns = [
 const statusMap = {
   0: {
     status: 'default',
-    text: '关闭'
+    text: '待审核'
   },
   1: {
     status: 'processing',

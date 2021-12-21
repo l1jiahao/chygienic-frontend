@@ -281,18 +281,19 @@ export const asyncRouterMap = [
         path: '/submit',
         name: 'submit',
         component: RouteView,
+        redirect: '/submit/sci',
         meta: { title: 'menu.submit', icon: 'idcard', permission: ['user'] },
         children: [
           {
             path: '/submit/sci',
             name: 'SubmitSci',
-            component: () => import('@/chygienic/user/stepForm/StepForm'),
+            component: () => import('@/chygienic/user/submit/SciLayout'),
             meta: { title: 'menu.sci', hidden: true, permission: ['user'] }
           },
           {
             path: '/submit/book',
             name: 'SubmitBook',
-            component: () => import('@/chygienic/user/stepForm/StepForm'),
+            component: () => import('@/chygienic/user/submit/BookLayout'),
             meta: {
               title: 'menu.book',
               hidden: true,
@@ -327,19 +328,20 @@ export const asyncRouterMap = [
       {
         path: '/check',
         name: 'check',
+        redirect: '/check/sci',
         component: RouteView,
         meta: { title: 'menu.check', icon: 'file-protect', permission: ['user'] },
         children: [
           {
             path: '/check/sci',
             name: 'CheckSci',
-            component: () => import('@/chygienic/admin/stepForm/StepForm'),
+            component: () => import('@/chygienic/admin/verify/SciVerifyLayout'),
             meta: { title: 'menu.sci', hidden: true, permission: ['user'] }
           },
           {
             path: '/check/book',
             name: 'CheckBook',
-            component: () => import('@/chygienic/admin/stepForm/StepForm'),
+            component: () => import('@/chygienic/admin/verify/BookVerifyLayout'),
             meta: {
               title: 'menu.book',
               hidden: true,
