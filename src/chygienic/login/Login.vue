@@ -62,7 +62,6 @@
           :disabled="state.loginBtn"
         >{{ $t('user.login.login') }}</a-button>
       </a-form-item>
-      <div @click="doTest2">test</div>
 
     </a-form>
 
