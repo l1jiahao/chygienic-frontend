@@ -100,16 +100,19 @@ const vueConfig = {
   },
 
   devServer: {
+    disableHostCheck: true,
     // development server port 8000
-    port: 8000
-    // If you want to turn on the proxy, please remove the mockjs /src/main.jsL11
-    // proxy: {
-    //   '/api': {
-    //     target: 'https://mock.ihx.me/mock/5baf3052f7da7e07e04a5116/antd-pro',
-    //     ws: false,
-    //     changeOrigin: true
-    //   }
-    // }
+    port: 8000,
+    proxy: {
+      '/prod': {
+        target: 'http://localhost:1203',
+        ws: false,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/prod': '' // 路径重写，会修改最终请求的API路径。这里是用空字符串替换/api。比如访问的API路径：/api/getList,最终代理访问的路径：http://www.baidu.com/getList
+        }
+      }
+    }
   },
 
   // disable source map in production

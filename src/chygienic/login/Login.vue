@@ -62,6 +62,7 @@
           :disabled="state.loginBtn"
         >{{ $t('user.login.login') }}</a-button>
       </a-form-item>
+      <div @click="doTest2">test</div>
 
     </a-form>
 
@@ -80,6 +81,7 @@ import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
 import { getSmsCaptcha, get2step } from '@/api/login'
+// import { $get } from '@/chygienic/util/request'
 
 export default {
   components: {
