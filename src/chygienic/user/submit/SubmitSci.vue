@@ -52,7 +52,7 @@
       </a-form-item>
       <a-form-item label="立项编号">
         <a-input
-          v-decorator="['number', { rules: [{ required: true, message: '请输入立项编号！' }] }]"
+          v-decorator="['project_number', { rules: [{ required: true, message: '请输入立项编号！' }] }]"
           placeholder="请填写立项编号"
         >
           <a-icon slot="prefix" type="safety-certificate" style="color:rgba(0,0,0,.25)" />
@@ -85,10 +85,10 @@
         :wrapperCol="{ span: 24 }"
         style="text-align: center"
       >
-        <a-button style="margin-right: 15px"  @click="changeBack">
+        <a-button style="margin-right: 15px" @click="changeBack">
           返回
         </a-button>
-        <a-button type="primary" html-type="submit">
+        <a-button type="primary" html-type="submit" >
           提交
         </a-button>
       </a-form-item>
@@ -101,6 +101,7 @@ export default {
   data () {
     return {
       formLayout: 'horizontal',
+      submitInfo: {},
       form: this.$form.createForm(this, { name: 'coordinated' })
     }
   },
@@ -111,9 +112,9 @@ export default {
         if (!err) {
           values.start = values.date[0].format('YYYY-MM-DD')
           values.end = values.date[1].format('YYYY-MM-DD')
-          console.log('Received values of form: ', values)
-          console.log(values['date'])
+          // console.log('Received values of form: ', values)
         }
+        this.collectSubmit(values)
       })
     },
     normFile (e) {
@@ -125,6 +126,17 @@ export default {
     },
     changeBack () {
       this.$emit('changeBack')
+    },
+    collectSubmit (values) {
+      // console.log(values)
+      // eslint-disable-next-line no-unused-vars
+      for (var i in values) {
+        if (i === 'date') {
+          continue
+        }
+        this.submitInfo[i] = values[i]
+      }
+      console.log(this.submitInfo)
     }
   }
 }

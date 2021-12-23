@@ -1,8 +1,8 @@
 <template>
-  <a-list :grid="{ gutter: 16, column: 1 }" :data-source="data">
-    <a-list-item slot="renderItem" slot-scope="item ,index">
-      <a-card :title="item.title">
-        Card content,{{ index }}
+  <a-list :grid="{ gutter: 16, column: 1 }" :data-source="model">
+    <a-list-item slot="renderItem" slot-scope="item">
+      <a-card :title="item.proj_bach_name">
+        <a-tag color="blue" v-for="(column_item,index) in item.limit_columns" :key="index">{{ column_item }}</a-tag>
         <a-form-item
           style="text-align: right"
         >
@@ -28,6 +28,16 @@ const data = [
   }
 ]
 export default {
+  props: {
+    visible: {
+      type: Boolean,
+      required: true
+    },
+    model: {
+      type: Array,
+      default: () => []
+    }
+  },
   data () {
     return {
       data

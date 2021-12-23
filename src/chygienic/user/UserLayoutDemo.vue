@@ -2,17 +2,16 @@
   <page-header-wrapper>
     <a-card :bordered="false">
       <div class="table-page-search-wrapper">
-        <a-table :columns="columns" :data-source="data" :rowKey="(record,index)=>{return index}">
+        <a-table :row-selection="rowSelection" :columns="columns" :data-source="data" :rowKey="(record,index)=>{return index}">
           <div slot="name" slot-scope="text">{{ text }}</div>
-          <span slot="customTitle"><a-icon type="smile-o" /> 项目</span>
-          <a-badge slot="status" slot-scope="text" :status="text===0?'processing':'success'" :text="text===1?'已通过':'待审核'"></a-badge>
-          <span slot="type" slot-scope="text" > {{ text===0?'科研':'教材' }}</span>
+          <span slot="customTitle"><a-icon type="smile-o" /> Name</span>
+          <a-badge slot="sex" slot-scope="text" :status="text===1?'processing':'success'" :text="text===1?'男':'女'"></a-badge>
           <span slot="action" slot-scope="text, record">
             <a @click="showAlter(record)" >修改</a>
             <a-divider type="vertical" />
             <a @click="showDetail(record)">详情</a>
             <a-divider type="vertical" />
-            <a @click="showDeleteConfirm(record)" v-show="record.status===0" style="color: crimson">撤销</a>
+            <a @click="showDeleteConfirm(record)" v-show="record.sex===1" style="color: crimson">撤销</a>
           </span>
         </a-table>
       </div>
@@ -28,7 +27,7 @@
         :loading="confirmLoading"
         :model="mdl"
         @cancel="showAlter"
-        @ok="doAlter"
+        @ok="showAlter"
       />
       <a-modal
         title="确认要撤销吗？"
@@ -41,6 +40,7 @@
       >
         <div>撤销之后需要重新填报相关信息</div>
       </a-modal>
+      <a-button @click="submit">submit</a-button>
     </a-card>
   </page-header-wrapper>
 </template>
@@ -54,20 +54,23 @@ const columns = [
   {
     slots: { title: 'customTitle' },
     scopedSlots: { customRender: 'name' },
-    dataIndex: 'proj_name'
+    dataIndex: 'name'
   },
   {
-    title: '状态',
-    dataIndex: 'status',
-    scopedSlots: { customRender: 'status' }
+    title: 'School',
+    dataIndex: 'school'
   },
   {
-    title: '类别',
-    dataIndex: 'proj_type_id',
-    scopedSlots: { customRender: 'type' }
+    title: 'Sex',
+    dataIndex: 'sex',
+    scopedSlots: { customRender: 'sex' }
   },
   {
-    title: '操作',
+    title: 'Phone',
+    dataIndex: 'phone'
+  },
+  {
+    title: 'Action',
     key: 'action',
     scopedSlots: { customRender: 'action' }
   }
@@ -81,12 +84,7 @@ const data = [
   },
   { proj_id: 2,
     proj_name: 'keyanxiangmu2',
-    proj_type_id: 0,
-    status: 0
-  },
-  { proj_id: 3,
-    proj_name: 'jiaocai3',
-    proj_type_id: 1,
+    proj_type_id: 2,
     status: 0
   },
   { proj_id: 3,
@@ -115,11 +113,11 @@ export default {
       submitInfo: []
     }
   },
-  // created () {
-  //   $get('/user/getAll').then(res => {
-  //     this.data = res.data.message
-  //   })
-  // },
+  created () {
+    $get('/user/getAll').then(res => {
+      this.data = res.data.message
+    })
+  },
   computed: {
     rowSelection () {
       const { selectedRowKeys } = this
@@ -178,10 +176,6 @@ export default {
       this.mdl = record
       this.alterVisible = !this.alterVisible
     },
-    doAlter (form) {
-      console.log(form)
-      this.alterVisible = !this.alterVisible
-    },
     doCancel () {
       console.log('doCancel')
     },
@@ -209,7 +203,7 @@ export default {
       this.submitInfo.push(
         { name: this.data[index].name,
           sex: this.data[index].sex
-      })
+        })
     }
   }
 }
