@@ -1,15 +1,33 @@
 import Mock from 'mockjs2'
 import { builder, getBody } from '../util'
+import { $post } from '@/chygienic/util/request'
 
-const username = ['admin', 'super']
+// const username = ['admin', 'super']
 // 强硬要求 ant.design 相同密码
 // '21232f297a57a5a743894a0e4a801fc3',
-const password = ['8914de686ab28dc22f30d3d8e107ff6c', '21232f297a57a5a743894a0e4a801fc3'] // admin, ant.design
+// const password = ['8914de686ab28dc22f30d3d8e107ff6c', '21232f297a57a5a743894a0e4a801fc3'] // admin, ant.design
+// eslint-disable-next-line no-unused-vars
+
+function verify (submitData) {
+  return new Promise((resolve, reject) => {
+      $post('/login/GetUserInformation', {
+        account: submitData.username,
+        password: submitData.password
+      }).then(res => {
+        // eslint-disable-next-line no-unused-vars
+        const successVal = res.data.status
+        resolve(successVal)
+      })
+    }
+  )
+}
 
 const login = (options) => {
   const body = getBody(options)
   console.log('mock: body', body)
-  if (!username.includes(body.username) || !password.includes(body.password)) {
+  const successVal = verify(body)
+  console.log('after resolve' + successVal)
+  if (!successVal) {
     return builder({ isLogin: true }, '账户或密码错误', 401)
   }
 

@@ -75,12 +75,11 @@
 </template>
 
 <script>
-import md5 from 'md5'
+// import md5 from 'md5'
 import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
 import { getSmsCaptcha, get2step } from '@/api/login'
-// import { $get } from '@/chygienic/util/request'
 
 export default {
   components: {
@@ -151,7 +150,7 @@ export default {
           const loginParams = { ...values }
           delete loginParams.username
           loginParams[!state.loginType ? 'email' : 'username'] = values.username
-          loginParams.password = md5(values.password)
+          loginParams.password = values.password
           Login(loginParams)
             .then((res) => this.loginSuccess(res))
             .catch(err => this.requestFailed(err))
@@ -209,7 +208,6 @@ export default {
       })
     },
     loginSuccess (res) {
-      console.log(res)
       // check res.homePage define, set $router.push name res.homePage
       // Why not enter onComplete
       /*
@@ -232,12 +230,13 @@ export default {
       this.isLoginError = false
     },
     requestFailed (err) {
-      this.isLoginError = true
-      this.$notification['error']({
-        message: '错误',
-        description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',
-        duration: 4
-      })
+      this.state.loginBtn = false
+      // this.$notification['error']({
+      //   message: '错误',
+      //   description: ((err.message || {}).data || {}).message || '请求出现错误，请稍后再试',
+      //   duration: 4
+      // })
+      this.$message.error(err.message)
     }
   }
 }
