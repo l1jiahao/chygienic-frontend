@@ -71,7 +71,12 @@ const user = {
 
           commit('SET_NAME', { name: result.name, welcome: welcome() })
           commit('SET_AVATAR', result.avatar)
-
+          const userInfo = {
+            user_id: 2,
+            role_id: 1
+          }
+          response.result['accessRole'] = userInfo.role_id === 1 ? ['admin'] : ['user']
+          response.result['user_id'] = userInfo.user_id
           resolve(response)
         }).catch(error => {
           reject(error)

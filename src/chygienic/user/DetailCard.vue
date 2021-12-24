@@ -9,7 +9,7 @@
   >
     <a-spin :spinning="loading">
       <a-form :form="form" v-bind="formLayout">
-        <a-form-item v-for="(item,index) in model.json_content" :label="attribute[index]" :key="index">
+        <a-form-item v-for="(item,index) in JSON.parse(model.json_content)" :label="attribute[index]" :key="index">
           <a-input v-decorator="['id', { initialValue: item }]" disabled ></a-input>
         </a-form-item>
       </a-form>

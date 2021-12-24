@@ -1,113 +1,54 @@
 <template>
   <page-header-wrapper>
-    <sci-form v-show="!change" @doSubmit="doSubmit" :visible="false" :model="verifyCard"></sci-form>
-    <verify-sci v-if="change" @doSubmit="doSubmit" :limit-columns="verifyCard[1].limit_columns" :model="projects"></verify-sci>
+    <sci-card v-if="!change" @doVerify="doVerify" :model="verifyCard"></sci-card>
+    <verify-sci v-if="change" @changeBack="changeBack" :limit-columns="limitColumns" :model="projects"></verify-sci>
   </page-header-wrapper>
 </template>
 
 <script>
-import sciForm from '@/chygienic/admin/verify/VerifyCard'
+import sciCard from '@/chygienic/admin/verify/VerifyCard'
 import verifySci from '@/chygienic/admin/verify/VerifySci'
-const verifyCard = [
-  {
-    proj_batch_id: 1,
-    proj_batch_name: 'diliyunpinggu',
-    limit_id: 2,
-    limit_columns: {
-      name: '名称',
-      fee: '项目经费',
-      start: '立项时间',
-      end: '验收时间'
-    },
-    establish_time: '2021-12-02',
-    establish_end_time: '2021-12-08'
-  },
-  {
-    proj_batch_id: 2,
-    proj_batch_name: 'dieryunpinggu',
-    limit_id: 3,
-    limit_columns: {
-      name: '名称',
-      host: '主持人',
-      level: '项目性质',
-      fee: '项目经费',
-      start: '立项时间',
-      end: '验收时间'
-    },
-    establish_time: '2021-12-02',
-    establish_end_time: '2021-12-08'
-  },
-  {
-    proj_batch_id: 3,
-    proj_batch_name: 'disanyunpinggu',
-    limit_id: 4,
-    limit_columns: {
-      name: '名称',
-      host: '主持人',
-      level: '项目性质',
-      fee: '项目经费',
-      start: '立项时间',
-      end: '验收时间'
-    },
-    establish_time: '2021-12-02',
-    establish_end_time: '2021-12-08'
-  }
-]
-const projects = [
-  {
-    proj_id: 2,
-    status: 0,
-    json_content: {
-      name: 'xx项目',
-      host: 'xxx',
-      level: '项目性质',
-      fee: 2000,
-      start: '立项时间',
-      end: '验收时间'
-    }
-  },
-  {
-    proj_id: 3,
-    status: 1,
-    json_content: {
-      name: 'xx项目',
-      host: 'xxx',
-      level: '项目性质',
-      fee: 2000,
-      start: '立项时间',
-      end: '验收时间'
-    }
-  },
-  {
-    proj_id: 4,
-    status: 2,
-    json_content: {
-      name: 'xx项目',
-      host: 'xxx',
-      level: '项目性质',
-      fee: 2000,
-      start: '立项时间',
-      end: '验收时间'
-    }
-  }
-]
+import { $get } from '@/chygienic/util/request'
+
 export default {
   name: 'SciVerifyLayout',
   data () {
     return {
       change: false,
-      verifyCard,
-      projects
+      limitColumns: null,
+      verifyCard: [],
+      projects: []
     }
   },
   components: {
-    sciForm,
+    sciCard,
     verifySci
   },
   methods: {
-    doSubmit () {
+    doVerify (cardIndex) {
+      const limitId = this.verifyCard[cardIndex].limit_id
+      this.limitColumns = JSON.parse(this.verifyCard[cardIndex].limit_columns)
+      $get('getFinishedProject/getAllFinishedProject?limit_id=' + limitId).then(res => {
+        this.projects = []
+        const sourceData = res.data.message
+        for (const i in sourceData) {
+          const row = JSON.parse(sourceData[i].json_content)
+          row['status'] = sourceData[i].status
+          row['proj_id'] = sourceData[i].proj_id
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+          this.projects.push(row)
+        }
+      })
+      this.change = !this.change
+    },
+    changeBack () {
       this.change = !this.change
     }
+  },
+  created () {
+    $get('getForm/getAllForm?proj_type_id=1').then(res => {
+      this.verifyCard = res.data.message
+    })
   }
 
 }

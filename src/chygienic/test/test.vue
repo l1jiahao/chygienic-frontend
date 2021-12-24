@@ -2,7 +2,7 @@
   <div>
     <button @click="doGet">get </button>
     <p v-for="(item, index) in info" :key="index"> {{ item.name +':' + item.career }} </p>
-    <button @click="doClear">clear</button>
+    <button @click="getStore">clear</button>
   </div>
 </template>
 
@@ -25,6 +25,11 @@ export default {
     },
     doClear () {
       this.info = []
+    },
+    getStore () {
+      $get('/getForm/getAllForm?proj_type_id=1').then(res => {
+        console.log(res.data.message[0].limit_columns)
+      })
     }
   }
 }

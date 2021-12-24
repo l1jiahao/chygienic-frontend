@@ -105,7 +105,7 @@ const vueConfig = {
     port: 8000,
     proxy: {
       '/prod': {
-        target: 'http://localhost:1203',
+        target: 'http://localhost:1202',
         ws: false,
         changeOrigin: true,
         pathRewrite: {
