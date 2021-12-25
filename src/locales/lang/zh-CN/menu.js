@@ -41,6 +41,7 @@ export default {
     'menu.submit': '项目申报',
     'menu.check': '信息审核',
     'menu.sci': '科研',
-    'menu.book': '教材'
+    'menu.book': '教材',
+    'menu.welcomePage': '欢迎'
 
 }

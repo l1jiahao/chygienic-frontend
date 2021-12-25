@@ -6,7 +6,7 @@ const info = options => {
   const userInfo = {
     // id: '4291d7da9005377ec9aec4a71ea837f',
     // name: '天野远子',
-    username: ['user']
+    // username: ['user']
     // password: '',
     // avatar: '/avatar2.jpg',
     // status: 1,

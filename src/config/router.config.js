@@ -15,15 +15,21 @@ export const asyncRouterMap = [
     name: 'index',
     component: BasicLayout,
     meta: { title: 'menu.home' },
-    redirect: '/dashboard/workplace',
+    redirect: '/welcome',
     children: [
+      {
+        path: '/welcome',
+        name: 'welcome',
+        component: () => import('@/chygienic/Welcome'),
+        meta: { title: 'menu.welcomePage', icon: 'home', permission: ['user', 'admin'] }
+      },
       // dashboard
       {
         path: '/dashboard',
         name: 'dashboard',
         redirect: '/dashboard/workplace',
         component: RouteView,
-        meta: { title: 'menu.dashboard', keepAlive: true, icon: bxAnaalyse, permission: ['dashboard', 'user', 'admin'] },
+        meta: { title: 'menu.dashboard', keepAlive: true, icon: bxAnaalyse, permission: ['dashboard'] },
         children: [
           {
             path: '/dashboard/analysis/:pageNo([1-9]\\d*)?',
@@ -41,7 +47,7 @@ export const asyncRouterMap = [
             path: '/dashboard/workplace',
             name: 'Workplace',
             component: () => import('@/views/dashboard/Workplace'),
-            meta: { title: 'menu.dashboard.workplace', keepAlive: true, permission: ['dashboard', 'user', 'admin'] }
+            meta: { title: 'menu.dashboard.workplace', keepAlive: true, permission: ['dashboard'] }
           }
         ]
       },

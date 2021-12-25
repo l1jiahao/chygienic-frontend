@@ -4,7 +4,7 @@
       <div class="table-page-search-wrapper">
         <a-table :columns="columns" :data-source="data" :rowKey="(record,index)=>{return index}">
           <div slot="name" slot-scope="text">{{ text }}</div>
-          <span slot="customTitle"><a-icon type="smile-o" /> 项目</span>
+          <span slot="customTitle"><a-icon type="smile-o" @click="testPrint"/> 项目</span>
           <a-badge slot="status" slot-scope="text" :status="text===0?'processing':'success'" :text="text===1?'已通过':'待审核'"></a-badge>
           <span slot="type" slot-scope="text" > {{ text===0?'科研':'教材' }}</span>
           <span slot="action" slot-scope="text, record">
@@ -20,15 +20,15 @@
         :visible="detailVisible"
         :loading="confirmLoading"
         :model="mdl"
-        @cancel="showDetail"
-        @ok="showDetail"
+        @cancel="handleDetailOk"
+        @ok="handleDetailOk"
       />
       <alter-card
         :visible="alterVisible"
         :loading="confirmLoading"
         :model="mdl"
-        @cancel="showAlter"
-        @ok="doAlter"
+        @cancel="handleAlterCancel"
+        @ok="handleAlterOk"
       />
       <a-modal
         title="确认要撤销吗？"
@@ -36,8 +36,8 @@
         :confirm-loading="confirmLoading"
         :cancelRecord="cancelRecord"
         okType="danger"
-        @ok="handleOk(cancelRecord)"
-        @cancel="handleCancel"
+        @ok="handleCancelOk(cancelRecord)"
+        @cancel="handleCancelCancel"
       >
         <div>撤销之后需要重新填报相关信息</div>
       </a-modal>
@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { $get } from '@/chygienic/util/request'
+import { $get, $post } from '@/chygienic/util/request'
 import DetailCard from '@/chygienic/user/DetailCard'
 import AlterCard from '@/chygienic/user/AlterCard'
 
@@ -73,29 +73,6 @@ const columns = [
   }
 ]
 
-const data = [
-  { proj_id: 1,
-    proj_name: 'keyanxiangmu',
-    proj_type_id: 0,
-    status: 1
-  },
-  { proj_id: 2,
-    proj_name: 'keyanxiangmu2',
-    proj_type_id: 0,
-    status: 0
-  },
-  { proj_id: 3,
-    proj_name: 'jiaocai3',
-    proj_type_id: 1,
-    status: 0
-  },
-  { proj_id: 3,
-    proj_name: 'jiaocai3',
-    proj_type_id: 1,
-    status: 0
-  }
-]
-
 export default {
   components: {
     DetailCard,
@@ -105,7 +82,7 @@ export default {
     return {
       confirmLoading: false,
       mdl: null,
-      data,
+      data: [],
       columns,
       selectedRowKeys: [], // Check here to configure the default column
       detailVisible: false,
@@ -115,55 +92,17 @@ export default {
       submitInfo: []
     }
   },
-  // created () {
-  //   $get('/user/getAll').then(res => {
-  //     this.data = res.data.message
-  //   })
-  // },
-  computed: {
-    rowSelection () {
-      const { selectedRowKeys } = this
-      return {
-        selectedRowKeys,
-        onChange: this.onSelectChange,
-        hideDefaultSelections: true,
-        selections: [
-          {
-            key: 'all-data',
-            text: '已通过',
-            onSelect: () => {
-              // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-              this.selectedRowKeys = [...Array(this.data.length).keys()] // 0...45
-            }
-          },
-          {
-            key: 'female',
-            text: '女性',
-            onSelect: changableRowKeys => {
-              let newSelectedRowKeys = []
-              newSelectedRowKeys = changableRowKeys.filter((key, index) => {
-                return this.data[index].sex === 0
-              })
-              // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-              this.selectedRowKeys = newSelectedRowKeys
-            }
-          },
-          {
-            key: 'male',
-            text: '选择男性',
-            onSelect: changableRowKeys => {
-              let newSelectedRowKeys = []
-              newSelectedRowKeys = changableRowKeys.filter((key, index) => {
-                return this.data[index].sex === 1
-              })
-              // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-              this.selectedRowKeys = newSelectedRowKeys
-            }
-          }
-        ],
-        onSelection: this.onSelection
+  created () {
+    $get('/get/getuserproject?user_id=' + this.$store.state.user.user_id).then(res => {
+      if (res.data.status === 1) {
+        this.data = res.data.message
+      } else {
+        this.$message.warn('抱歉 ' + res.data.message + ' 请退出后重新登录！')
+        this.data = []
       }
-    }
+    })
+  },
+  computed: {
   },
   methods: {
     onSelectChange (selectedRowKeys) {
@@ -171,19 +110,38 @@ export default {
       this.selectedRowKeys = selectedRowKeys
     },
     showDetail (record) {
-      this.mdl = record
+      $get('/Getone/get?proj_id=' + record.proj_id).then(res => {
+          this.mdl = res.data.message.json_content
+          this.detailVisible = !this.detailVisible
+      }).catch(err => {
+        this.$message.error(err.message)
+      })
+    },
+    handleDetailOk () {
       this.detailVisible = !this.detailVisible
     },
     showAlter (record) {
-      this.mdl = record
-      this.alterVisible = !this.alterVisible
+      $get('/Getone/get?proj_id=' + record.proj_id).then(res => {
+        this.mdl = res.data.message
+        this.alterVisible = !this.alterVisible
+      }).catch(err => {
+        this.$message.error(err.message)
+      })
     },
-    doAlter (form) {
-      console.log(form)
-      this.alterVisible = !this.alterVisible
+    handleAlterOk (submitData) {
+      $post('/updateprojectinform/change', submitData).then(res => {
+        if (res.data.status === 1) {
+          this.$message.success('修改成功！')
+          setTimeout(() => {
+            this.alterVisible = !this.alterVisible
+          }, 1000)
+        } else {
+          this.$message.warn(res.data.message)
+        }
+      })
     },
-    doCancel () {
-      console.log('doCancel')
+    handleAlterCancel () {
+      this.alterVisible = !this.alterVisible
     },
     showDeleteConfirm (record) {
       this.modalVisible = !this.modalVisible
@@ -193,23 +151,24 @@ export default {
       this.data.splice(this.data.indexOf(record), 1)
       this.modalVisible = !this.modalVisible
     },
-    handleCancel () {
+    handleCancelCancel () {
       this.modalVisible = !this.modalVisible
     },
-    submit () {
-      this.submitInfo = []
-      console.log(this.selectedRowKeys)
-      this.selectedRowKeys.forEach(this.extractSelectData)
-      console.log(this.submitInfo)
-      $get('/getone', JSON.stringify(this.submitInfo)).then(res => {
-        console.log(res)
+    handleCancelOk (record) {
+      $get('/delete/deleteproject?proj_id=' + record.proj_id).then(res => {
+        if (res.data.status === 1) {
+          this.$message.info('删除成功！')
+          setTimeout(() => {
+            this.modalVisible = !this.modalVisible
+            this.data.splice(this.data.indexOf(record))
+          }, 1000)
+        } else {
+          this.$message.error('删除失败')
+        }
       })
     },
-    extractSelectData (index) {
-      this.submitInfo.push(
-        { name: this.data[index].name,
-          sex: this.data[index].sex
-      })
+    testPrint () {
+      console.log(this.$store.state.user)
     }
   }
 }

@@ -12,7 +12,13 @@ const user = {
     avatar: '',
     roles: [],
     info: {},
-    role_id: 0
+    role_id: -1,
+    user_id: -1,
+    sex: 0,
+    school: '',
+    career: '',
+    identity_number: '',
+    phone_number: ''
   },
 
   mutations: {
@@ -34,6 +40,14 @@ const user = {
     },
     SET_ROLE_ID: (state, roleId) => {
       state.role_id = roleId
+    },
+    SET_BASIC: (state, { userID, sex, school, career, identityNumber, phoneNumber }) => {
+      state.user_id = userID
+      state.sex = sex
+      state.school = school
+      state.career = career
+      state.identity_nubmer = identityNumber
+      state.phone_nubmer = phoneNumber
     }
   },
 
@@ -49,6 +63,12 @@ const user = {
           // commit('SET_INFO', result)
           commit('SET_ROLE_ID', result.message.role_id)
           commit('SET_NAME', { name: result.message.name, welcome: welcome() })
+          commit('SET_BASIC', { userID: result.message.user_id,
+                                sex: result.message.sex,
+                                school: result.message.school,
+                                career: result.message.career,
+                                identityNumber: result.message.identity_number,
+                                phoneNumber: result.message.phone_number })
           resolve(result)
         }).catch(error => {
           reject(error)
@@ -79,6 +99,7 @@ const user = {
           }
           commit('SET_AVATAR', result.avatar)
           response['role_id'] = user.state.role_id
+          response['user_name'] = user.state.name
           resolve(response)
         }).catch(error => {
           reject(error)

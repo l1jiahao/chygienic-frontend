@@ -4,39 +4,13 @@
     :width="640"
     :visible="visible"
     :confirmLoading="loading"
-    @ok="() => { $emit('ok',this.detail) }"
+    @ok="handleOk"
     @cancel="() => { $emit('cancel') }"
   >
     <a-spin :spinning="loading">
       <a-form :form="form" v-bind="formLayout">
-        <a-form-item v-for="(item,index) in detail.json_content" :label="attribute[index]" :key="index">
-          <a-input v-show="index!=='level'" v-decorator="['id'+index , { initialValue: item }]" v-model.number="detail.json_content[index]" ></a-input>
-          <a-form-item v-show="index==='level'" >
-            <a-select
-              v-decorator="[
-                'level',
-                { rules: [{ required: true, message: '请选择项目类型！' }] },
-              ]"
-              placeholder="请选择项目类型"
-              v-model="detail.json_content.level"
-            >
-              <a-select-option value="国家级项目">
-                国家级项目
-              </a-select-option>
-              <a-select-option value="国防/军队重要科研项目">
-                国防/军队重要科研项目
-              </a-select-option>
-              <a-select-option value="境外合作科研项目">
-                境外合作科研项目
-              </a-select-option>
-              <a-select-option value="部委级项目">
-                部委级项目
-              </a-select-option>
-              <a-select-option value="省级项目">
-                省级项目
-              </a-select-option>
-            </a-select>
-          </a-form-item>
+        <a-form-item v-for="(item,index) in model['json_content']" :label="attribute[index]" :key="index">
+          <a-input  v-decorator="[index , { initialValue: item }]" ></a-input>
         </a-form-item>
       </a-form>
     </a-spin>
@@ -49,19 +23,18 @@ const attribute = {
   fee: '项目经费',
   name: '项目名称',
   host: '主持人',
-  level: '项目性质'
+  level: '项目性质',
+  start: '立项时间',
+  end: '验收时间',
+  category: '入选',
+  category_time: '入选情况',
+  publisher: '出版社',
+  publish_time: '出版时间',
+  project_number: '立项编号'
 }
-const detail = {
-  json_id: 1,
-  json_content: {
-    name: 'keyanxiangmu1',
-    host: 'ljh',
-    fee: 2000,
-    level: '国家级项目'
-  }
-}
+
 // 表单字段
-const fields = ['description', 'id']
+const fields = ['name']
 
 export default {
   props: {
@@ -90,14 +63,12 @@ export default {
       }
     }
     return {
-      detail,
       attribute,
+      submitData: {},
       form: this.$form.createForm(this)
     }
   },
   created () {
-    console.log('custom modal created')
-
     // 防止表单未注册
     fields.forEach(v => this.form.getFieldDecorator(v))
 
@@ -107,8 +78,15 @@ export default {
     })
   },
   methods: {
-    test () {
-      console.log(this.form.getFieldsValue())
+    handleOk () {
+      // eslint-disable-next-line handle-callback-err
+      this.form.validateFields((err, values) => {
+        this.submitData = values
+      })
+      this.$emit('ok', {
+        json_id: this.model.json_id,
+        json_content: this.submitData
+      })
     }
   }
 }
