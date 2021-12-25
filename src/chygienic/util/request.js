@@ -32,3 +32,10 @@ export function $get (url, params) {
 export function $post (url, params) {
   return myAxios.post(url, params)
 }
+
+export function loginChy (userInfo) {
+  return $post('/login/GetUserInformation', {
+    account: userInfo.username,
+    password: userInfo.password
+  })
+}

@@ -2,6 +2,7 @@ import storage from 'store'
 import { login, getInfo, logout } from '@/api/login'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
+import { loginChy } from '@/chygienic/util/request'
 
 const user = {
   state: {
@@ -36,11 +37,11 @@ const user = {
     // 登录
     Login ({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
-        login(userInfo).then(response => {
-          const result = response.result
-          storage.set(ACCESS_TOKEN, result.token, 7 * 24 * 60 * 60 * 1000)
-          commit('SET_TOKEN', result.token)
-          resolve()
+        loginChy(userInfo).then(response => {
+          const result = response.data
+          storage.set(ACCESS_TOKEN, '4291d7da9005377ec9aec4a71ea837f', 7 * 24 * 60 * 60 * 1000)
+          commit('SET_TOKEN', '4291d7da9005377ec9aec4a71ea837f')
+          resolve(result)
         }).catch(error => {
           reject(error)
         })
