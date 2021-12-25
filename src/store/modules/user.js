@@ -1,5 +1,5 @@
 import storage from 'store'
-import { login, getInfo, logout } from '@/api/login'
+import { getInfo, logout } from '@/api/login'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
 import { loginChy } from '@/chygienic/util/request'
@@ -11,7 +11,8 @@ const user = {
     welcome: '',
     avatar: '',
     roles: [],
-    info: {}
+    info: {},
+    role_id: 0
   },
 
   mutations: {
@@ -30,6 +31,9 @@ const user = {
     },
     SET_INFO: (state, info) => {
       state.info = info
+    },
+    SET_ROLE_ID: (state, roleId) => {
+      state.role_id = roleId
     }
   },
 
@@ -41,6 +45,10 @@ const user = {
           const result = response.data
           storage.set(ACCESS_TOKEN, '4291d7da9005377ec9aec4a71ea837f', 7 * 24 * 60 * 60 * 1000)
           commit('SET_TOKEN', '4291d7da9005377ec9aec4a71ea837f')
+          // commit('SET_ROLES', result.role_id)
+          // commit('SET_INFO', result)
+          commit('SET_ROLE_ID', result.message.role_id)
+          commit('SET_NAME', { name: result.message.name, welcome: welcome() })
           resolve(result)
         }).catch(error => {
           reject(error)
@@ -69,15 +77,8 @@ const user = {
           } else {
             reject(new Error('getInfo: roles must be a non-null array !'))
           }
-
-          commit('SET_NAME', { name: result.name, welcome: welcome() })
           commit('SET_AVATAR', result.avatar)
-          const userInfo = {
-            user_id: 2,
-            role_id: 1
-          }
-          response.result['accessRole'] = userInfo.role_id === 1 ? ['admin'] : ['user']
-          response.result['user_id'] = userInfo.user_id
+          response['role_id'] = user.state.role_id
           resolve(response)
         }).catch(error => {
           reject(error)

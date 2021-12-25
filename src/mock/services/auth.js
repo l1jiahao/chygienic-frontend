@@ -1,6 +1,5 @@
 import Mock from 'mockjs2'
-import { builder, getBody } from '../util'
-import { $post } from '@/chygienic/util/request'
+import { builder } from '../util'
 
 // const username = ['admin', 'super']
 // 强硬要求 ant.design 相同密码

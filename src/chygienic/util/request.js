@@ -39,3 +39,11 @@ export function loginChy (userInfo) {
     password: userInfo.password
   })
 }
+export function getInfoChy (userInfo) {
+  return $post('/login/GetUserInformation', {
+    account: userInfo.username,
+    password: userInfo.password
+  }).then(res => {
+
+  })
+}

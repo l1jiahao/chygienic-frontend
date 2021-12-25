@@ -308,19 +308,19 @@ export const asyncRouterMap = [
         path: '/admin',
         name: 'admin',
         component: RouteView,
-        meta: { title: 'menu.admin', icon: 'form', permission: ['user'] },
+        meta: { title: 'menu.admin', icon: 'form', permission: ['admin'] },
         children: [
           {
             path: '/admin/sci',
             name: 'ReleaseSci',
             component: () => import('@/chygienic/admin/ReleaseSci'),
-            meta: { title: 'menu.sci', hidden: true, permission: ['user'] }
+            meta: { title: 'menu.sci', hidden: true, permission: ['admin'] }
           },
           {
             path: '/admin/book',
             name: 'ReleaseBook',
             component: () => import('@/chygienic/admin/ReleaseBook'),
-            meta: { title: 'menu.book', hidden: true, permission: ['user'] }
+            meta: { title: 'menu.book', hidden: true, permission: ['admin'] }
           }
         ]
       },
