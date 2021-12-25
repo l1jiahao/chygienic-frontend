@@ -9,35 +9,34 @@
           <a-icon slot="prefix" type="hdd" style="color:rgba(0,0,0,.25)" />
         </a-input>
       </a-form-item>
-      <a-form-item label="主持人">
+      <a-form-item v-if="model.includes('host')" label="主持人">
         <a-input
-          v-decorator="['host', { rules: [{ required: true, message: '请输入主持人！' }] }]"
+          v-decorator="['host']"
           placeholder="请输入主持人姓名"
         >
           <a-icon slot="prefix" type="user" style="color:rgba(0,0,0,.25)" />
         </a-input>
       </a-form-item>
-      <a-form-item label="项目类型">
+      <a-form-item v-if="model.includes('level')" label="项目类型">
         <a-select
           v-decorator="[
-            'level',
-            { rules: [{ required: true, message: '请选择项目类型！' }] },
+            'level'
           ]"
           placeholder="请选择项目类型"
         >
-          <a-select-option value="1">
+          <a-select-option value="国家级项目">
             国家级项目
           </a-select-option>
-          <a-select-option value="2">
+          <a-select-option value="国防/军队重要科研项目">
             国防/军队重要科研项目
           </a-select-option>
-          <a-select-option value="3">
+          <a-select-option value="境外合作科研项目">
             境外合作科研项目
           </a-select-option>
-          <a-select-option value="4">
+          <a-select-option value="部委级项目">
             部委级项目
           </a-select-option>
-          <a-select-option value="5">
+          <a-select-option value="省级项目">
             省级项目
           </a-select-option>
         </a-select>
@@ -70,6 +69,7 @@
           v-decorator="[
             'upload',
             {
+              initialValue: null,
               valuePropName: 'fileList',
               getValueFromEvent: normFile,
             },
@@ -98,6 +98,12 @@
 
 <script>
 export default {
+  props: {
+    model: {
+      type: Array,
+      default: () => []
+    }
+  },
   data () {
     return {
       formLayout: 'horizontal',
@@ -128,15 +134,16 @@ export default {
       this.$emit('changeBack')
     },
     collectSubmit (values) {
-      // console.log(values)
-      // eslint-disable-next-line no-unused-vars
       for (var i in values) {
         if (i === 'date') {
           continue
         }
         this.submitInfo[i] = values[i]
       }
-      console.log(this.submitInfo)
+      if (!this.submitInfo.upload) {
+        this.submitInfo.upload = 0
+      }
+      this.$emit('upLoadSubmit', this.submitInfo)
     }
   }
 }

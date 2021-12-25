@@ -9,8 +9,8 @@
   >
     <a-spin :spinning="loading">
       <a-form :form="form" v-bind="formLayout">
-        <a-form-item v-for="(item,index) in model['json_content']" :label="attribute[index]" :key="index">
-          <a-input  v-decorator="[index , { initialValue: item }]" ></a-input>
+        <a-form-item v-for="(item,index) in model['json_content']" :label="attribute[index]" :key="index" v-if="attribute[index]">
+          <a-input v-decorator="[index , { initialValue: item }]" ></a-input>
         </a-form-item>
       </a-form>
     </a-spin>
@@ -30,7 +30,8 @@ const attribute = {
   category_time: '入选情况',
   publisher: '出版社',
   publish_time: '出版时间',
-  project_number: '立项编号'
+  project_number: '立项编号',
+  appendix: null
 }
 
 // 表单字段

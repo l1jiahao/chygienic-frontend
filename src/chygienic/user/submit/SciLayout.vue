@@ -1,66 +1,25 @@
 <template>
   <page-header-wrapper>
-    <sci-card v-show="!change" @doSubmit="doSubmit" :model="submitCard" :visible="false"></sci-card>
-    <submit-sci v-if="change" @changeBack="doSubmit"></submit-sci>
+    <sci-card v-if="!change" @doSubmit="handleSubmit" :model="verifyCard"></sci-card>
+    <submit-sci v-if="change" @changeBack="changeBack" @upLoadSubmit="doSubmit" :model="limitAttributes"></submit-sci>
   </page-header-wrapper>
 </template>
 
 <script>
 import sciCard from '@/chygienic/user/submit/submitCard'
 import submitSci from '@/chygienic/user/submit/SubmitSci'
-const submitCard = [
-  {
-    proj_bach_id: 1,
-    proj_bach_name: 'diliyunpinggu',
-    limit_id: 2,
-    limit_columns: {
-      name: '名称',
-      host: '主持人',
-      level: '项目性质',
-      fee: '项目经费',
-      start: '立项时间',
-      end: '验收时间'
-    },
-    establish_time: '2021-12-02',
-    establish_end_time: '2021-12-08'
-  },
-  {
-    proj_bach_id: 2,
-    proj_bach_name: 'dieryunpinggu',
-    limit_id: 3,
-    limit_columns: {
-      name: '名称',
-      host: '主持人',
-      level: '项目性质',
-      fee: '项目经费',
-      start: '立项时间',
-      end: '验收时间'
-    },
-    establish_time: '2021-12-02',
-    establish_end_time: '2021-12-08'
-  },
-  {
-    proj_bach_id: 3,
-    proj_bach_name: 'disanyunpinggu',
-    limit_id: 4,
-    limit_columns: {
-      name: '名称',
-      host: '主持人',
-      level: '项目性质',
-      fee: '项目经费',
-      start: '立项时间',
-      end: '验收时间'
-    },
-    establish_time: '2021-12-02',
-    establish_end_time: '2021-12-08'
-  }
-]
+import { $get, $post } from '@/chygienic/util/request'
+
 export default {
-  name: 'SciLayout',
+  name: 'SciVerifyLayout',
   data () {
     return {
-      submitCard,
-      change: false
+      change: false,
+      limitColumns: null,
+      limitAttributes: [],
+      selectedCard: -1,
+      verifyCard: [],
+      projects: []
     }
   },
   components: {
@@ -68,9 +27,42 @@ export default {
     submitSci
   },
   methods: {
-    doSubmit () {
+    handleSubmit (cardIndex) {
+      this.selectedCard = cardIndex
+      this.limitColumns = JSON.parse(this.verifyCard[cardIndex].limit_columns)
+      this.limitAttributes = []
+      for (var i in this.limitColumns) {
+        this.limitAttributes.push(i)
+      }
       this.change = !this.change
+    },
+    changeBack () {
+      this.change = !this.change
+    },
+    doSubmit (submitInfo) {
+      $post('/demo1/demo2', {
+        user_id: this.$store.state.user.user_id,
+        proj_name: submitInfo.name,
+        proj_type_id: 1,
+        json_content: submitInfo,
+        limit_id: this.verifyCard[this.selectedCard].limit_id,
+        appendix: submitInfo.upload === 0 ? 0 : 1
+      }).then(res => {
+        if (res.data.status === 1) {
+          this.$message.success(res.data.message)
+          setTimeout(() => {
+            this.change = !this.change
+          }, 1000)
+        } else {
+          this.$message.warn(res.data.message)
+        }
+      })
     }
+  },
+  created () {
+    $get('getForm/getAllForm?proj_type_id=1').then(res => {
+      this.verifyCard = res.data.message
+    })
   }
 
 }

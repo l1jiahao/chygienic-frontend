@@ -26,13 +26,12 @@
         </a-input>
       </a-form-item>
       <a-form-item label="出版时间">
-        <a-date-picker v-decorator="['publish_time', config]" />
+        <a-date-picker v-decorator="['publish_time', { rules: [{ required: true, message: '请选择出版时间！' }] }]" />
       </a-form-item>
-      <a-form-item label="入选情况">
+      <a-form-item v-if="model.includes('category')" label="入选情况">
         <a-select
           v-decorator="[
             'category',
-            { rules: [{ required: true, message: '请选择入选情况！' }] },
           ]"
           placeholder="请选择项目类型"
         >
@@ -47,8 +46,8 @@
           </a-select-option>
         </a-select>
       </a-form-item>
-      <a-form-item label="入选时间">
-        <a-date-picker v-decorator="['category_time', config]" />
+      <a-form-item v-if="model.includes('category_time')" label="入选时间">
+        <a-date-picker v-decorator="['category_time']" />
       </a-form-item>
       <a-form-item label="上传文件" extra="请上传相关证明文件（图片）">
         <a-upload
@@ -83,22 +82,25 @@
 
 <script>
 export default {
+  props: {
+    model: {
+      type: Array,
+      default: () => []
+    }
+  },
   data () {
     return {
       formLayout: 'horizontal',
-      form: this.$form.createForm(this, { name: 'coordinated' }),
-      config: {
-        rules: [{ type: 'object', required: true, message: '请选择时间!' }]
-      }
+      submitInfo: {},
+      form: this.$form.createForm(this, { name: 'coordinated' })
     }
   },
   methods: {
     handleSubmit (e) {
       e.preventDefault()
+      // eslint-disable-next-line handle-callback-err
       this.form.validateFields((err, values) => {
-        if (!err) {
-          console.log('Received values of form: ', values)
-        }
+        this.collectSubmit(values)
       })
     },
     normFile (e) {
@@ -110,6 +112,15 @@ export default {
     },
     changeBack () {
       this.$emit('changeBack')
+    },
+    collectSubmit (values) {
+      for (var i in values) {
+        this.submitInfo[i] = values[i]
+      }
+      if (!this.submitInfo.upload) {
+        this.submitInfo.upload = 0
+      }
+      this.$emit('upLoadSubmit', this.submitInfo)
     }
   }
 }

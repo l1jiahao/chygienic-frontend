@@ -5,7 +5,7 @@
         <a-table :columns="columns" :data-source="data" :rowKey="(record,index)=>{return index}">
           <div slot="name" slot-scope="text">{{ text }}</div>
           <span slot="customTitle"><a-icon type="smile-o" @click="testPrint"/> 项目</span>
-          <a-badge slot="status" slot-scope="text" :status="text===0?'processing':'success'" :text="text===1?'已通过':'待审核'"></a-badge>
+          <a-badge slot="status" slot-scope="text" :status="text | fmtBadge" :text="text | fmtStatus"></a-badge>
           <span slot="type" slot-scope="text" > {{ text===0?'科研':'教材' }}</span>
           <span slot="action" slot-scope="text, record">
             <a @click="showAlter(record)" >修改</a>
@@ -90,6 +90,14 @@ export default {
       modalVisible: false,
       cancelRecord: null,
       submitInfo: []
+    }
+  },
+  filters: {
+    fmtStatus (val) {
+      return ['待审核', '已通过', '未通过'][val]
+    },
+    fmtBadge (val) {
+      return ['processing', 'success', 'error'][val]
     }
   },
   created () {
