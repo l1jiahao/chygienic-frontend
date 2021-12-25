@@ -6,12 +6,12 @@
           <div slot="name" slot-scope="text">{{ text }}</div>
           <span slot="customTitle"><a-icon type="smile-o" @click="testPrint"/> 项目</span>
           <a-badge slot="status" slot-scope="text" :status="text | fmtBadge" :text="text | fmtStatus"></a-badge>
-          <span slot="type" slot-scope="text" > {{ text===0?'科研':'教材' }}</span>
+          <span slot="type" slot-scope="text" > {{ text===1?'科研':'教材' }}</span>
           <span slot="action" slot-scope="text, record">
-            <a @click="showAlter(record)" >修改</a>
-            <a-divider type="vertical" />
+            <a @click="showAlter(record)" v-show="record.status===0" >修改</a>
+            <a-divider type="vertical" v-show="record.status===0"/>
             <a @click="showDetail(record)">详情</a>
-            <a-divider type="vertical" />
+            <a-divider v-show="record.status===0" type="vertical" />
             <a @click="showDeleteConfirm(record)" v-show="record.status===0" style="color: crimson">撤销</a>
           </span>
         </a-table>
@@ -167,7 +167,7 @@ export default {
           this.$message.info('删除成功！')
           setTimeout(() => {
             this.modalVisible = !this.modalVisible
-            this.data.splice(this.data.indexOf(record))
+            this.data.splice(this.data.indexOf(record), 1)
           }, 1000)
         } else {
           this.$message.error('删除失败')

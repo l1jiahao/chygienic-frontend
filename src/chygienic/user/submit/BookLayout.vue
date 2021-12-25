@@ -43,7 +43,7 @@ export default {
       $post('/demo1/demo2', {
         user_id: this.$store.state.user.user_id,
         proj_name: submitInfo.name,
-        proj_type_id: 1,
+        proj_type_id: 2,
         json_content: submitInfo,
         limit_id: this.verifyCard[this.selectedCard].limit_id,
         appendix: submitInfo.upload === 0 ? 0 : 1

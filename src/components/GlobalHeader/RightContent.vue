@@ -33,6 +33,8 @@ export default {
       required: true
     }
   },
+  created () {
+  },
   data () {
     return {
       showMenu: true,
@@ -50,7 +52,7 @@ export default {
   mounted () {
     setTimeout(() => {
       this.currentUser = {
-        name: 'Serati Ma'
+        name: this.$store.state.user.name === '' ? '请重新登录' : this.$store.state.user.name
       }
     }, 1500)
   }

@@ -28,20 +28,20 @@
         <a v-show="record.status!==2" @click="doReject(model.indexOf(record))" style="color: crimson">拒绝</a>
       </span>
     </a-table>
-    <!--    <detail-card-->
-    <!--      :visible="detailVisible"-->
-    <!--      :loading="confirmLoading"-->
-    <!--      :model="mdl"-->
-    <!--      @cancel="showDetail"-->
-    <!--      @ok="showDetail"-->
-    <!--    />-->
+    <detail-card
+      :visible="detailVisible"
+      :loading="confirmLoading"
+      :model="mdl"
+      @cancel="handleDetailOk"
+      @ok="handleDetailOk"
+    />
   </a-card>
 </template>
 
 <script>
 import DetailCard from '@/chygienic/user/DetailCard'
 import outputExcel from '@/chygienic/util/outputExcel'
-import { $post } from '@/chygienic/util/request'
+import { $get, $post } from '@/chygienic/util/request'
 
 export default {
   props: {
@@ -164,23 +164,15 @@ export default {
       this.$emit('changeBack')
     },
     showDetail (record) {
+      $get('/Getone/get?proj_id=' + record.proj_id).then(res => {
+        this.mdl = res.data.message.json_content
+        this.detailVisible = !this.detailVisible
+      }).catch(err => {
+        this.$message.error(err.message)
+      })
+    },
+    handleDetailOk () {
       this.detailVisible = !this.detailVisible
-      console.log(JSON.stringify(
-        {
-          proj_id: record.proj_id
-        }
-      ))
-      this.mdl = {
-        json_id: 1,
-        json_content: {
-          name: 'xx项目',
-          host: 'xxx',
-          level: '项目性质',
-          fee: 2000,
-          start: '立项时间',
-          end: '验收时间'
-        }
-      }
     },
     doAccept (index) {
       $post('/update/updateStatus', {

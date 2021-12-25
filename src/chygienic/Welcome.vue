@@ -9,20 +9,16 @@
           <div class="content-title">
             {{ timeFix }}，{{ user.name }}<span class="welcome-text">，{{ welcome }}</span>
           </div>
-          <div>前端工程师 | 蚂蚁金服 - 某某某事业群 - VUE平台</div>
         </div>
       </div>
     </template>
     <template v-slot:extraContent>
       <div class="extra-content">
         <div class="stat-item">
-          <a-statistic title="项目数" :value="56" />
+          <a-statistic  title="所属学院" :value="user.school" />
         </div>
         <div class="stat-item">
-          <a-statistic title="团队内排名" :value="8" suffix="/ 24" />
-        </div>
-        <div class="stat-item">
-          <a-statistic title="项目访问" :value="2223" />
+          <a-statistic title="职称" :value="user.career" />
         </div>
       </div>
     </template>
@@ -170,6 +166,9 @@ export default {
   },
   created () {
     this.user = this.userInfo
+    this.user.name = this.$store.state.user.name
+    this.user.school = this.$store.state.user.school
+    this.user.career = this.$store.state.user.career
     this.avatar = this.userInfo.avatar
 
     getRoleList().then(res => {
