@@ -105,7 +105,6 @@ export default {
       if (res.data.status === 1) {
         this.data = res.data.message
       } else {
-        this.$message.warn('抱歉 ' + res.data.message + ' 请退出后重新登录！')
         this.data = []
       }
     })

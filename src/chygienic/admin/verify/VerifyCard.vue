@@ -3,6 +3,7 @@
     <a-list-item slot="renderItem" slot-scope="item">
       <a-card :title="item.proj_batch_name">
         <a-tag color="blue" v-for="(column_item,index) in JSON.parse(item.limit_columns)" :key="index">{{ column_item }}</a-tag>
+        <a-tag color="green">{{ '已填报：' + projectsNum[model.indexOf(item)] }}</a-tag>
         <a-form-item
           style="text-align: right"
         >
@@ -21,6 +22,10 @@ export default {
     model: {
       type: Array,
       default: () => []
+    },
+    projectsNum: {
+      type: Array,
+      default: () => []
     }
   },
   data () {
@@ -30,6 +35,13 @@ export default {
   methods: {
     doVerify (cardIndex) {
       this.$emit('doVerify', cardIndex)
+    },
+    getNum (limitId) {
+      for (var i in this.projectsNum) {
+        if (this.projectsNum[i].limit_id === limitId) {
+          return this.projectsNum[i].num
+        }
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <page-header-wrapper>
-    <sci-card v-if="!change" @doVerify="doVerify" :model="verifyCard"></sci-card>
+    <sci-card v-if="!change" @doVerify="doVerify" :model="verifyCard" :projects-num="createData"></sci-card>
     <verify-sci v-if="change" @changeBack="changeBack" :limit-columns="limitColumns" :model="projects"></verify-sci>
   </page-header-wrapper>
 </template>
@@ -17,12 +17,46 @@ export default {
       change: false,
       limitColumns: null,
       verifyCard: [],
-      projects: []
+      projects: [],
+      createData: [],
+      row: {}
     }
   },
   components: {
     sciCard,
     verifySci
+  },
+  created () {
+    const getCard = () => {
+      return $get('getForm/getAllForm?proj_type_id=1')
+    }
+    const getLimits = async () => {
+      const res = await getCard()
+      this.verifyCard = res.data.message
+      return res.data.message
+    }
+    const getIds = async () => {
+      const cards = await getLimits()
+      const ids = []
+      for (var i in cards) {
+        ids.push(cards[i].limit_id)
+      }
+      return ids
+    }
+    getIds().then(res => {
+      const promises = res.map(function (id) {
+        return $get('getFinishedProject/getAllFinishedProject?limit_id=' + id)
+      })
+      Promise.all(promises).then(posts => {
+        for (var j in posts) {
+          if (posts[j].data.status === 1) {
+            this.createData.push(posts[j].data.message.length)
+          } else {
+            this.createData.push(0)
+          }
+        }
+      })
+    })
   },
   methods: {
     doVerify (cardIndex) {
@@ -44,11 +78,6 @@ export default {
     changeBack () {
       this.change = !this.change
     }
-  },
-  created () {
-    $get('getForm/getAllForm?proj_type_id=1').then(res => {
-      this.verifyCard = res.data.message
-    })
   }
 
 }

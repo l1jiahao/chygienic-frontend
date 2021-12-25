@@ -26,7 +26,7 @@
           <a-checkbox default-checked disabled />
         </a-form-item>
         <a-form-item label="立项/验收时间">
-          <a-checkbox default-checked disabled/>
+          <a-checkbox default-checked disabled />
         </a-form-item>
         <a-form-item label="需要附件" >
           <a-checkbox v-decorator="['appendix',{ initialValue: false }]"/>
@@ -52,6 +52,8 @@
 </template>
 
 <script>
+import { $post } from '@/chygienic/util/request'
+
 const initColums = {
   name: '项目名称',
   host: '主持人',
@@ -66,8 +68,8 @@ export default {
     return {
       releaseInfo: {
         proj_batch_name: '',
-        limit_columns: {},
-        proj_type_id: 0,
+        limit_column: {},
+        proj_type_id: 1,
         establish_time: '',
         establish_end_time: ''
       },
@@ -85,7 +87,6 @@ export default {
       e.preventDefault()
       this.form.validateFields((err, values) => {
         if (!err) {
-          console.log('Received values of form: ', values)
           this.doRelease(values)
         }
       })
@@ -97,9 +98,6 @@ export default {
       }
       return e && e.fileList
     },
-    changeBack () {
-      this.$emit('changeBack')
-    },
     checkColumn (e) {
       console.log('选中')
     },
@@ -108,13 +106,20 @@ export default {
       this.releaseInfo.establish_time = values.date[0].format('YYYY-MM-DD')
       this.releaseInfo.establish_end_time = values.date[1].format('YYYY-MM-DD')
       for (var i in values) {
-        console.log(values[i])
         if (values[i] === false) {
           delete this.initColums[i]
         }
       }
-      this.releaseInfo.limit_columns = initColums
-      console.log(JSON.stringify(this.releaseInfo))
+      this.releaseInfo.limit_column = initColums
+      $post('/publish/publishcolumn', this.releaseInfo).then(res => {
+        if (res.data.status === 1) {
+          this.$message.success(res.data.message)
+        } else {
+          this.$message.error(res.data.message)
+        }
+      }).catch(err => {
+        this.$message.error(err)
+      })
     }
   }
 }
