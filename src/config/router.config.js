@@ -41,7 +41,7 @@ export const asyncRouterMap = [
             path: '/dashboard/workplace',
             name: 'Workplace',
             component: () => import('@/views/dashboard/Workplace'),
-            meta: { title: 'menu.dashboard.workplace', keepAlive: true, permission: ['dashboard', 'user'] }
+            meta: { title: 'menu.dashboard.workplace', keepAlive: true, permission: ['dashboard', 'user', 'admin'] }
           }
         ]
       },
@@ -209,19 +209,19 @@ export const asyncRouterMap = [
         component: RouteView,
         redirect: '/account/center',
         name: 'account',
-        meta: { title: 'menu.account', icon: 'user', keepAlive: true, permission: ['user'] },
+        meta: { title: 'menu.account', icon: 'user', keepAlive: true, permission: ['user', 'admin'] },
         children: [
           {
             path: '/account/center',
             name: 'center',
             component: () => import('@/views/account/center'),
-            meta: { title: 'menu.account.center', keepAlive: true, permission: ['user'] }
+            meta: { title: 'menu.account.center', keepAlive: true, permission: ['user', 'admin'] }
           },
           {
             path: '/account/settings',
             name: 'settings',
             component: () => import('@/views/account/settings/Index'),
-            meta: { title: 'menu.account.settings', hideHeader: true, permission: ['user'] },
+            meta: { title: 'menu.account.settings', hideHeader: true, permission: ['user', 'admin'] },
             redirect: '/account/settings/basic',
             hideChildrenInMenu: true,
             children: [
@@ -229,7 +229,7 @@ export const asyncRouterMap = [
                 path: '/account/settings/basic',
                 name: 'BasicSettings',
                 component: () => import('@/views/account/settings/BasicSetting'),
-                meta: { title: 'account.settings.menuMap.basic', hidden: true, permission: ['user'] }
+                meta: { title: 'account.settings.menuMap.basic', hidden: true, permission: ['user', 'admin'] }
               },
               {
                 path: '/account/settings/security',
@@ -246,13 +246,13 @@ export const asyncRouterMap = [
                 path: '/account/settings/custom',
                 name: 'CustomSettings',
                 component: () => import('@/views/account/settings/Custom'),
-                meta: { title: 'account.settings.menuMap.custom', hidden: true, keepAlive: true, permission: ['user'] }
+                meta: { title: 'account.settings.menuMap.custom', hidden: true, keepAlive: true, permission: ['user', 'admin'] }
               },
               {
                 path: '/account/settings/binding',
                 name: 'BindingSettings',
                 component: () => import('@/views/account/settings/Binding'),
-                meta: { title: 'account.settings.menuMap.binding', hidden: true, keepAlive: true, permission: ['user'] }
+                meta: { title: 'account.settings.menuMap.binding', hidden: true, keepAlive: true, permission: ['user', 'admin'] }
               },
               {
                 path: '/account/settings/notification',
@@ -262,7 +262,7 @@ export const asyncRouterMap = [
                   title: 'account.settings.menuMap.notification',
                   hidden: true,
                   keepAlive: true,
-                  permission: ['user']
+                  permission: ['user', 'admin']
                 }
               }
             ]
@@ -274,7 +274,7 @@ export const asyncRouterMap = [
         path: '/client',
         name: 'client',
         component: () => import(/* webpackChunkName: "client" */ '@/chygienic/user/UserDashboard'),
-        meta: { title: 'menu.client', icon: 'home', permission: ['user'] }
+        meta: { title: 'menu.client', icon: 'home', permission: ['user', 'admin'] }
       },
       // 用户申报
       {
@@ -282,13 +282,13 @@ export const asyncRouterMap = [
         name: 'submit',
         component: RouteView,
         redirect: '/submit/sci',
-        meta: { title: 'menu.submit', icon: 'idcard', permission: ['user'] },
+        meta: { title: 'menu.submit', icon: 'idcard', permission: ['user', 'admin'] },
         children: [
           {
             path: '/submit/sci',
             name: 'SubmitSci',
             component: () => import('@/chygienic/user/submit/SciLayout'),
-            meta: { title: 'menu.sci', hidden: true, permission: ['user'] }
+            meta: { title: 'menu.sci', hidden: true, permission: ['user', 'admin'] }
           },
           {
             path: '/submit/book',
@@ -298,7 +298,7 @@ export const asyncRouterMap = [
               title: 'menu.book',
               hidden: true,
               keepAlive: true,
-              permission: ['user']
+              permission: ['user', 'admin']
             }
           }
         ]
@@ -330,13 +330,13 @@ export const asyncRouterMap = [
         name: 'check',
         redirect: '/check/sci',
         component: RouteView,
-        meta: { title: 'menu.check', icon: 'file-protect', permission: ['user'] },
+        meta: { title: 'menu.check', icon: 'file-protect', permission: ['admin'] },
         children: [
           {
             path: '/check/sci',
             name: 'CheckSci',
             component: () => import('@/chygienic/admin/verify/SciVerifyLayout'),
-            meta: { title: 'menu.sci', hidden: true, permission: ['user'] }
+            meta: { title: 'menu.sci', hidden: true, permission: ['admin'] }
           },
           {
             path: '/check/book',
@@ -346,7 +346,7 @@ export const asyncRouterMap = [
               title: 'menu.book',
               hidden: true,
               keepAlive: true,
-              permission: ['user']
+              permission: ['admin']
             }
           },
           {
@@ -357,7 +357,7 @@ export const asyncRouterMap = [
               title: 'test',
               hidden: true,
               keepAlive: true,
-              permission: ['user']
+              permission: ['admin']
             }
           }
         ]
