@@ -354,17 +354,6 @@ export const asyncRouterMap = [
               keepAlive: true,
               permission: ['admin']
             }
-          },
-          {
-            path: '/check/test',
-            name: 'Test',
-            component: () => import('@/chygienic/test/test'),
-            meta: {
-              title: 'test',
-              hidden: true,
-              keepAlive: true,
-              permission: ['admin']
-            }
           }
         ]
       }
