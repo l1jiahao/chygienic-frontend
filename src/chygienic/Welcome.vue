@@ -25,28 +25,18 @@
 
     <div>
       <a-row :gutter="24">
-        <a-col :xl="16" :lg="24" :md="24" :sm="24" :xs="24">
-        </a-col>
-        <a-col
-          style="padding: 0 12px"
-          :xl="8"
-          :lg="24"
-          :md="24"
-          :sm="24"
-          :xs="24">
-          <a-card :loading="loading" title="团队(按首字母排序)" :bordered="false">
-            <div class="members">
-              <a-row>
-                <a-col :span="12" v-for="(item, index) in teams" :key="index">
-                  <a >
-                    <a-avatar size="small" :src="item.avatar" />
-                    <span class="member">{{ item.name }}</span>
-                  </a>
-                </a-col>
-              </a-row>
-            </div>
-          </a-card>
-        </a-col>
+        <a-card :loading="loading" title="团队(按首字母排序)" :bordered="false">
+          <div class="members">
+            <a-row>
+              <a-col :span="12" v-for="(item, index) in teams" :key="index">
+                <a >
+                  <a-avatar size="small" :src="item.avatar" />
+                  <span class="member">{{ item.name }}</span>
+                </a>
+              </a-col>
+            </a-row>
+          </div>
+        </a-card>
       </a-row>
     </div>
   </page-header-wrapper>
