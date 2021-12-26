@@ -32,23 +32,18 @@
 
 <script>
 import { PageView, RouteView } from '@/layouts'
-import { AppPage, ArticlePage, ProjectPage } from './page'
-
-import { mapGetters } from 'vuex'
 
 export default {
   components: {
     RouteView,
-    PageView,
-    AppPage,
-    ArticlePage,
-    ProjectPage
+    PageView
   },
   created () {
+    console.log(this.$store.state.user)
     this.username = this.$store.state.user.name
     this.sex = this.$store.state.user.sex === 1 ? '男' : '女'
-    this.phone = this.$store.state.user.phone_number
-    this.identity = this.$store.state.user.identity_number
+    this.phone = this.$store.state.user.phone
+    this.identity = this.$store.state.user.identity
     this.career = this.$store.state.user.career
     this.school = this.$store.state.user.school
   },
@@ -77,36 +72,20 @@ export default {
       noTitleKey: 'app'
     }
   },
-  computed: {
-    ...mapGetters(['nickname', 'avatar'])
-  },
-  mounted () {
-    this.getTeams()
-  },
   methods: {
-    getTeams () {
-      this.$http.get('/workplace/teams').then(res => {
-        this.teams = res.result
-        this.teamSpinning = false
-      })
-    },
-
     handleTabChange (key, type) {
       this[type] = key
     },
-
     handleTagClose (removeTag) {
       const tags = this.tags.filter(tag => tag !== removeTag)
       this.tags = tags
     },
-
     showTagInput () {
       this.tagInputVisible = true
       this.$nextTick(() => {
         this.$refs.tagInput.focus()
       })
     },
-
     handleInputChange (e) {
       this.tagInputValue = e.target.value
     },
@@ -117,12 +96,6 @@ export default {
       if (inputValue && !tags.includes(inputValue)) {
         tags = [...tags, inputValue]
       }
-
-      Object.assign(this, {
-        tags,
-        tagInputVisible: false,
-        tagInputValue: ''
-      })
     }
   }
 }

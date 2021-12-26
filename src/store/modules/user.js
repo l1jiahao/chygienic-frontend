@@ -17,8 +17,8 @@ const user = {
     sex: 0,
     school: '',
     career: '',
-    identity_number: '',
-    phone_number: ''
+    identity: '',
+    phone: ''
   },
 
   mutations: {
@@ -46,8 +46,8 @@ const user = {
       state.sex = sex
       state.school = school
       state.career = career
-      state.identity_nubmer = identityNumber
-      state.phone_nubmer = phoneNumber
+      state.identity = identityNumber
+      state.phone = phoneNumber
     }
   },
 
@@ -59,8 +59,6 @@ const user = {
           const result = response.data
           storage.set(ACCESS_TOKEN, '4291d7da9005377ec9aec4a71ea837f', 7 * 24 * 60 * 60 * 1000)
           commit('SET_TOKEN', '4291d7da9005377ec9aec4a71ea837f')
-          // commit('SET_ROLES', result.role_id)
-          // commit('SET_INFO', result)
           commit('SET_ROLE_ID', result.message.role_id)
           commit('SET_NAME', { name: result.message.name, welcome: welcome() })
           commit('SET_BASIC', { userID: result.message.user_id,

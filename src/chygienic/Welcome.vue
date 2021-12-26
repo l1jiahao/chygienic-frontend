@@ -26,34 +26,6 @@
     <div>
       <a-row :gutter="24">
         <a-col :xl="16" :lg="24" :md="24" :sm="24" :xs="24">
-          <a-card
-            class="project-list"
-            :loading="loading"
-            style="margin-bottom: 24px;"
-            :bordered="false"
-            title="使用到的框架/工具"
-            :body-style="{ padding: 0 }"
-          >
-            <div>
-              <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in projects">
-                <a-card :bordered="false" :body-style="{ padding: 0 }">
-                  <a-card-meta>
-                    <div slot="title" class="card-title">
-                      <a-avatar size="small" :src="item.cover" />
-                      <a>{{ item.title }}</a>
-                    </div>
-                    <div slot="description" class="card-description">
-                      {{ item.description }}
-                    </div>
-                  </a-card-meta>
-                  <div class="project-item">
-                    <a href="/#/">科学搬砖组</a>
-                    <span class="datetime">9小时前</span>
-                  </div>
-                </a-card>
-              </a-card-grid>
-            </div>
-          </a-card>
         </a-col>
         <a-col
           style="padding: 0 12px"
@@ -62,11 +34,11 @@
           :md="24"
           :sm="24"
           :xs="24">
-          <a-card :loading="loading" title="团队" :bordered="false">
+          <a-card :loading="loading" title="团队(按首字母排序)" :bordered="false">
             <div class="members">
               <a-row>
                 <a-col :span="12" v-for="(item, index) in teams" :key="index">
-                  <a>
+                  <a >
                     <a-avatar size="small" :src="item.avatar" />
                     <span class="member">{{ item.name }}</span>
                   </a>
@@ -101,6 +73,14 @@ export default {
       timeFix: timeFix(),
       avatar: '',
       user: {},
+      chyMember: [
+        'https://github.com/jzd-boy',
+        'https://github.com/nogralee',
+        'https://github.com/Cruise-M',
+        'https://github.com/MGUMB',
+        'https://github.com/distanceywc',
+        'https://github.com/shuaigeyyy'
+      ],
 
       projects: [],
       loading: true,
@@ -198,9 +178,15 @@ export default {
       })
     },
     getTeams () {
-      this.$http.get('/workplace/teams').then(res => {
-        this.teams = res.result
-      })
+        const chyTeam = ['匡阳明', '李嘉豪', '孟皓宇', '马瑞', '姚望辰', '余意远']
+        for (var i in chyTeam) {
+          const member = {
+            avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
+            id: i,
+            name: chyTeam[i]
+          }
+          this.teams.push(member)
+        }
     },
     initRadar () {
       this.radarLoading = true
