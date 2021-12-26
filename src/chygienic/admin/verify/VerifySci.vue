@@ -83,7 +83,7 @@ export default {
             onSelect: changableRowKeys => {
               let newSelectedRowKeys = []
               newSelectedRowKeys = changableRowKeys.filter((key, index) => {
-                return this.processData[index].status === 0
+                return this.model[index].status === 0
               })
               // eslint-disable-next-line vue/no-side-effects-in-computed-properties
               this.selectedRowKeys = newSelectedRowKeys
