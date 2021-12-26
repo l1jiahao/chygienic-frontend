@@ -310,7 +310,7 @@ export const asyncRouterMap = [
             name: 'settings',
             component: () => import('@/views/account/settings/Index'),
             meta: { title: 'menu.account.settings', hideHeader: true, permission: ['user', 'admin'] },
-            redirect: '/account/settings/basic',
+            redirect: '/account/settings/security',
             hideChildrenInMenu: true,
             children: [
               {

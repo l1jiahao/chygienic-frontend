@@ -143,6 +143,7 @@ export default {
       if (!this.submitInfo.upload) {
         this.submitInfo.upload = 0
       }
+      console.log(this.submitInfo)
       this.$emit('upLoadSubmit', this.submitInfo)
     }
   }
