@@ -5,16 +5,14 @@
         <a-card :bordered="false">
           <div class="account-center-avatarHolder">
             <div class="avatar">
-              <img :src="avatar">
+              <img src="~@/assets/logo.png">
             </div>
             <div class="username">{{ username }}</div>
           </div>
           <div class="account-center-detail">
-            <a-form-item
-              style="text-align: center"
-            >
-              <a-tag style="margin-right: auto" type='apartment'>{{ sex }}</a-tag>
-            </a-form-item>
+            <p>
+              <a-icon type="user" />{{ sex }}
+            </p>
             <p>
               <a-icon type="apartment" />{{ school + '-' + career }}
             </p>
@@ -171,13 +169,6 @@ export default {
       position: relative;
     }
 
-    i {
-      position: absolute;
-      height: 14px;
-      width: 14px;
-      left: 350px;
-      top: 4px;
-    }
   }
 
   .account-center-tags {
