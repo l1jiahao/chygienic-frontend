@@ -12,7 +12,7 @@
             <a-divider type="vertical" v-show="record.status===0"/>
             <a @click="showDetail(record)">详情</a>
             <a-divider v-show="record.status===0" type="vertical" />
-            <a @click="showDeleteConfirm(record)" v-show="record.status===0" style="color: crimson">撤销</a>
+            <a @click="showDeleteConfirm(record)" v-show="record.status!==1" style="color: crimson">撤销</a>
           </span>
         </a-table>
       </div>
