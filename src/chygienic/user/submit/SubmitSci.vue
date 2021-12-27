@@ -77,6 +77,7 @@
           name="logo"
           action="/upload.do"
           list-type="picture"
+          @change="handleChange"
         >
           <a-button> <a-icon type="upload" /> 点击上传附件 </a-button>
         </a-upload>
@@ -97,6 +98,7 @@
 </template>
 
 <script>
+
 export default {
   props: {
     model: {
@@ -108,6 +110,7 @@ export default {
     return {
       formLayout: 'horizontal',
       submitInfo: {},
+      submitFile: null,
       form: this.$form.createForm(this, { name: 'coordinated' })
     }
   },
@@ -143,8 +146,15 @@ export default {
       if (!this.submitInfo.upload) {
         this.submitInfo.upload = 0
       }
-      console.log(this.submitInfo)
-      this.$emit('upLoadSubmit', this.submitInfo)
+      this.$emit('upLoadSubmit', {
+        info: this.submitInfo,
+        file: this.submitFile
+      })
+    },
+    handleChange (info) {
+      const formdata = new FormData()
+      formdata.append('file', info.file.originFileObj)
+      this.submitFile = formdata
     }
   }
 }

@@ -20,6 +20,8 @@
         :visible="detailVisible"
         :loading="confirmLoading"
         :model="mdl"
+        :has-file="hasFile"
+        :file-name="fileName"
         @cancel="handleDetailOk"
         @ok="handleDetailOk"
       />
@@ -82,6 +84,8 @@ export default {
     return {
       confirmLoading: false,
       mdl: null,
+      hasFile: false,
+      fileName: '',
       data: [],
       columns,
       selectedRowKeys: [], // Check here to configure the default column
@@ -117,6 +121,14 @@ export default {
       this.selectedRowKeys = selectedRowKeys
     },
     showDetail (record) {
+      this.hasFile = false
+      $get('/getPath?project_id=' + record.proj_id).then(res => {
+        console.log(res.data)
+        if (res.data.status === 1) {
+          this.hasFile = true
+          this.fileName = res.data.message
+        }
+      })
       $get('/Getone/get?proj_id=' + record.proj_id).then(res => {
           this.mdl = res.data.message.json_content
           this.detailVisible = !this.detailVisible
