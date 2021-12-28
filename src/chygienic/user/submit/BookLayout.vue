@@ -7,7 +7,7 @@
 
 <script>
 import sciCard from '@/chygienic/user/submit/submitCard'
-import submitSci from '@/chygienic/user/submit/SubmitSci'
+import submitSci from '@/chygienic/user/submit/SubmitBook'
 import { $get, $post } from '@/chygienic/util/request'
 
 export default {

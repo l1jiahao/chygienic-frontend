@@ -61,6 +61,7 @@
           name="logo"
           action="/upload.do"
           list-type="picture"
+          @change="handleChange"
         >
           <a-button> <a-icon type="upload" /> 点击上传附件 </a-button>
         </a-upload>
@@ -115,12 +116,23 @@ export default {
     },
     collectSubmit (values) {
       for (var i in values) {
+        if (i === 'date') {
+          continue
+        }
         this.submitInfo[i] = values[i]
       }
       if (!this.submitInfo.upload) {
         this.submitInfo.upload = 0
       }
-      this.$emit('upLoadSubmit', this.submitInfo)
+      this.$emit('upLoadSubmit', {
+        info: this.submitInfo,
+        file: this.submitFile
+      })
+    },
+    handleChange (info) {
+      const formdata = new FormData()
+      formdata.append('file', info.file.originFileObj)
+      this.submitFile = formdata
     }
   }
 }
