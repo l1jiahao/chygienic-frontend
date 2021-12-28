@@ -93,6 +93,7 @@ export default {
     return {
       formLayout: 'horizontal',
       submitInfo: {},
+      submitFile: null,
       form: this.$form.createForm(this, { name: 'coordinated' })
     }
   },
@@ -101,6 +102,8 @@ export default {
       e.preventDefault()
       // eslint-disable-next-line handle-callback-err
       this.form.validateFields((err, values) => {
+        values.publish_time = values.publish_time.format('YYYY-MM-DD')
+        values.category_time = values.category_time.format('YYYY-MM-DD')
         this.collectSubmit(values)
       })
     },
